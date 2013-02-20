@@ -6,6 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+require_recipe 'base-server'
 require_recipe 'ntp'
 require_recipe 'nginx'
 
@@ -31,4 +32,12 @@ end
 
 nginx_site 'app-server' do
   enable true
+end
+
+template '/etc/iptables.d/webserver' do
+  source 'webserver.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
+  notifies :run, resources(execute: 'rebuild-iptables')
 end

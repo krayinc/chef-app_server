@@ -1,0 +1,1 @@
+-A FWR -p tcp -m tcp --dport <%= node['app_server'] && node['app_server']['port'] || 80 %> -m conntrack --ctstate NEW -j ACCEPT
