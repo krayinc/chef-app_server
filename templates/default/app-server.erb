@@ -1,0 +1,29 @@
+upstream app {
+  server <%= node['app_server']['sock'] %> fail_timeout=0;
+}
+
+server {
+  listen <%= node['app_server']['port'] || 80 %>;
+  server_name <%= node['app_server']['server_name'] %>;
+
+  root <%= node['app_server']['root'] %>;
+
+  access_log <%= node['app_server']['log_path'] %>/access.log main;
+  error_log <%= node['app_server']['log_path'] %>/error.log;
+
+  client_max_body_size <%= node['app_server']['client_max_body_size'] || '1m' %>;
+  gzip_types text/plain text/css text/xml application/x-javascript;
+
+  location ~ ^/assets/ {
+    expires 1y;
+    add_header Cache-Control public;
+    add_header ETag "";
+    break;
+  }
+
+  location / {
+    if (!-f $document_root$uri) {
+      proxy_pass http://app;
+    }
+  }
+}
