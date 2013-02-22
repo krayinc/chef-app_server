@@ -15,6 +15,11 @@ execute "install_bundler" do
   not_if { begin Gem::Specification.find_by_name('bundler'); rescue Gem::LoadError => e; false end }
 end
 
+directory node['app_server']['log_path'] do
+  mode 00755
+  recursive true
+end
+
 cookbook_file "#{node['nginx']['dir']}/conf.d/log_formats.conf" do
   source 'log_formats.conf'
   owner 'root'
