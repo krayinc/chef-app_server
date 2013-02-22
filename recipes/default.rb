@@ -16,7 +16,7 @@ execute "install_bundler" do
 end
 
 directory node['app_server']['log_path'] do
-  mode 00755
+  mode 00775
   recursive true
 end
 
