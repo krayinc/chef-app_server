@@ -6,9 +6,9 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-require_recipe 'base-server'
-require_recipe 'ntp'
-require_recipe 'nginx'
+include_recipe 'base-server'
+include_recipe 'ntp'
+include_recipe 'nginx'
 
 execute "install_bundler" do
   command "gem i bundler --no-ri --no-rdoc"
