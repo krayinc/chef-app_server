@@ -27,6 +27,11 @@ cookbook_file "#{node['nginx']['dir']}/conf.d/log_formats.conf" do
   mode 00644
 end
 
+template "#{node['nginx']['dir']}/ssl" do
+  source 'ssl.erb'
+  mode 00644
+end
+
 template "#{node['nginx']['dir']}/sites-available/app-server" do
   source 'app-server.erb'
   owner 'root'
