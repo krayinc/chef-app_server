@@ -20,6 +20,10 @@ directory node['app_server']['log_path'] do
   recursive true
 end
 
+directory "#{node['nginx']['dir']}/app-server-conf.d" do
+  mode 00775
+end
+
 cookbook_file "#{node['nginx']['dir']}/conf.d/log_formats.conf" do
   source 'log_formats.conf'
   owner 'root'
