@@ -1,0 +1,12 @@
+ssl                  on;
+ssl_certificate      app_server.pem;
+ssl_certificate_key  app_server.key;
+
+ssl_session_timeout  5m;
+
+ssl_protocols  SSLv2 SSLv3 TLSv1;
+ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+ssl_prefer_server_ciphers   on;
+
+proxy_set_header    HTTPS   on;
+proxy_set_header    X-Forwarded-Proto https;
