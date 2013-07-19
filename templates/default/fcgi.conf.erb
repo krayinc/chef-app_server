@@ -1,7 +1,9 @@
 location <%= node[:app_server][:nginx_fcgi][:location] %> {
   gzip off;
   root  <%= node[:app_server][:nginx_fcgi][:root] %>;
-  fastcgi_pass  unix:/var/run/fcgiwrap.socket;
   include /etc/nginx/fastcgi_params;
   fastcgi_param SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+  if  ($uri ~ \.cgi) {
+    fastcgi_pass unix:/var/run/fcgiwrap.socket;
+  }
 }
