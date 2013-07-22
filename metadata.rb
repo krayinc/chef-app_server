@@ -4,7 +4,7 @@ maintainer_email 'all@kray.jp'
 license          'All rights reserved'
 description      'Installs/Configures app-server'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.1.11'
+version          '0.1.12'
 depends          'base-server'
 depends          'ntp'
 depends          'nginx'

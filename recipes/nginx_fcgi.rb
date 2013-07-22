@@ -20,7 +20,9 @@ service 'spawn-fcgi' do
   action [:enable, :start]
 end
 
-service 'nginx'
+service 'nginx' do
+  supports :reload => true
+end
 
 template "#{node[:nginx][:dir]}/app-server-conf.d/fcgi.conf" do
   mode 00644
