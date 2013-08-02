@@ -25,8 +25,10 @@ cookbook_file "#{node['nginx']['dir']}/conf.d/log_formats.conf" do
   mode 00644
 end
 
-%w[ssl proxy].each do |conf|
-  template "#{node['nginx']['dir']}/#{conf}" do
+confs = %w[proxy]
+confs << 'ssl' if node[:app_server][:use_ssl]
+confs.each do |conf|
+  template "#{node['nginx']['dir']}/app-server-conf.d/#{conf}.conf" do
     mode 00644
   end
 end

@@ -14,12 +14,6 @@ server {
   client_max_body_size <%= node['app_server']['client_max_body_size'] || '1m' %>;
   gzip_types text/plain text/css text/xml application/x-javascript;
 
-  include <%= node['nginx']['dir'] %>/proxy;
-
-  <% if node['app_server']['use_ssl'] -%>
-  include <%= node['nginx']['dir'] %>/ssl;
-  <% end -%>
-
   include <%= node['nginx']['dir'] %>/app-server-conf.d/*.conf;
 
   location ~ ^/assets/ {
