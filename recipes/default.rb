@@ -6,7 +6,6 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe 'base-server'
 include_recipe 'ntp'
 include_recipe 'nginx'
 
