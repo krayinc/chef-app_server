@@ -1,0 +1,76 @@
+location ^~ /s3/ {
+  if ($request_uri ~* "^/s3/(.*)\.(jpg|jpeg|gif|png)") {
+    set $file $1.$2;
+  }
+
+  resolver 8.8.8.8;
+  proxy_pass https://<%= @s3_endpoint %>/<%= @s3_bucket %>/$file;
+  proxy_set_header Host <%= @s3_endpoint %>;
+  proxy_cache original;
+  proxy_cache_key $scheme$proxy_host$uri$is_args$args;
+  proxy_cache_valid 200 1d;
+
+  allow 127.0.0.1;
+  deny all;
+
+  access_log <%= node[:app_server][:log_path] %>/s3.log main;
+}
+
+location ^~ /resize/ {
+  if ($request_uri ~* "^/resize/(.*)\.(jpg|jpeg|gif|png)") {
+    set $file $1.$2;
+  }
+
+  proxy_pass $scheme://127.0.0.1/s3/$file;
+  proxy_set_header Host $host;
+
+  set $img_width $arg_width;
+  set $img_height $arg_height;
+  image_filter resize $img_width $img_height;
+  image_filter_buffer 10M;
+  image_filter_jpeg_quality 75;
+
+  allow 127.0.0.1;
+  deny all;
+
+  access_log <%= node[:app_server][:log_path] %>/resize.log imageresize;
+}
+
+location ^~ /crop/ {
+  if ($request_uri ~* "^/crop/(.*)\.(jpg|jpeg|gif|png)") {
+    set $file $1.$2;
+  }
+
+  proxy_pass $scheme://127.0.0.1/s3/$file;
+  proxy_set_header Host $host;
+
+  set $img_width $arg_width;
+  set $img_height $arg_height;
+  image_filter crop $img_width $img_height;
+  image_filter_buffer 10M;
+  image_filter_jpeg_quality 75;
+
+  allow 127.0.0.1;
+  deny all;
+
+  access_log <%= node[:app_server][:log_path] %>/crop.log imagecrop;
+}
+
+location ~* "-[0-9]+x[0-9]+[cr]\.(jpg|jpeg|gif|png)$" {
+  if ($request_uri ~* "^/(.*)-([0-9]+)x([0-9]+)r\.(jpg|jpeg|gif|png)") {
+    set $image_path resize/$1.$4?width=$2&height=$3;
+  }
+
+  if ($request_uri ~* "^/(.*)-([0-9]+)x([0-9]+)c\.(jpg|jpeg|gif|png)") {
+    set $image_path crop/$1.$4?width=$2&height=$3;
+  }
+
+  proxy_cache converted;
+  proxy_cache_key $scheme$proxy_host$uri$is_args$args;
+  proxy_cache_valid 200 3d;
+
+  proxy_pass $scheme://127.0.0.1/$image_path;
+  proxy_set_header Host $host;
+
+  expires max;
+}

@@ -1,0 +1,2 @@
+proxy_cache_path <%= @cache_dir %> levels=1:2 keys_zone=original:64m max_size=65536m inactive=30d;
+proxy_cache_path <%= @cache_dir %> levels=1:2 keys_zone=converted:256m max_size=65536m inactive=30d;
