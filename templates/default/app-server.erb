@@ -3,7 +3,7 @@ upstream app {
 }
 
 server {
-  listen <%= node['app_server']['port'] || (node['app_server']['use_ssl'] ? 443 : 80) %>;
+  listen <%= node['app_server']['port'] || (node['app_server']['use_ssl'] ? 443 : 80) %><% if node['app_server']['use_ssl'] %> default ssl<% end %>;
   server_name <%= node['app_server']['server_name'] %>;
 
   root <%= node['app_server']['root'] %>;
@@ -34,6 +34,6 @@ server {
 server {
   listen 80;
   server_name <%= node['app_server']['server_name'] %>;
-  rewrite ^(.*)$ https://<%= node['app_server']['server_name'] %>$1 last;
+  return 301 https://$host$request_uri;
 }
 <% end -%>
