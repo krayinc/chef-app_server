@@ -8,3 +8,4 @@ default[:app_server][:sock] = "unix:/tmp/#{node.name}-#{node.chef_environment}.s
 default[:app_server][:capistrano_pre_setup][:deploy_to] = deploy_to
 
 default[:app_server][:ruby][:version] = '2.0.0-p247'
+default[:app_server][:ruby][:gems] = []
