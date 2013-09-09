@@ -11,15 +11,15 @@ end
 
 template "#{node[:nginx][:dir]}/conf.d/proxy_cache.conf" do
   mode 00644
-  variables(
+  variables({
     :cache_dir => node[:image_converter][:cache_dir],
-  )
+  })
 end
 
 template "#{node[:nginx][:dir]}/app-server-conf.d/image_converter.conf" do
   mode 00644
-  variables(
+  variables({
     :s3_bucket   => node[:image_converter][:s3_bucket],
     :s3_endpoint => node[:image_converter][:s3_endpoint],
-  )
+  })
 end
