@@ -5,6 +5,10 @@ directory node[:image_converter][:cache_dir] do
   recursive true
 end
 
+cookbook_file "#{node['nginx']['dir']}/conf.d/image_comverter_log_formats.conf" do
+  mode 00644
+end
+
 template "#{node[:nginx][:dir]}/conf.d/proxy_cache.conf" do
   mode 00644
   variables(
