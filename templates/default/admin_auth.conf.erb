@@ -1,0 +1,12 @@
+location /admin {
+  if ($remote_addr !~ '(<%= node[:app_server][:admin_auth][:authorized_hosts].map{|h| Regexp.escape h }.join("|") %>)') {
+    return 403;
+  }
+
+  auth_basic "Restricted";
+  auth_basic_user_file /var/www/<%= node.name %>/<%= node.chef_environment %>/.htpasswd;
+
+  if (!-f $document_root$uri) {
+    proxy_pass http://app;
+  }
+}
