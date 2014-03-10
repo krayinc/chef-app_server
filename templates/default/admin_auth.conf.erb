@@ -1,5 +1,5 @@
 location /admin {
-  if ($remote_addr !~ '(<%= node[:app_server][:admin_auth][:authorized_hosts].map{|h| Regexp.escape h }.join("|") %>)') {
+  if ($http_x_forwarded_for !~ '(<%= node[:app_server][:admin_auth][:authorized_hosts].map{|h| Regexp.escape h }.join("|") %>)') {
     return 403;
   }
 
